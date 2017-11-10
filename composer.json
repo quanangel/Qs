@@ -1,0 +1,23 @@
+{
+    "name": "quanangel/qs-thinkphp5",
+    "description": "qs-thinkphp5 is Thinkphp5 extend",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "quan",
+            "email": "quanangel@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qs\\auth\\": "auth/",
+            "Qs\\phpanalysis\\": "phpanalysis/",
+            "Qs\\redis\\": "redis/",
+            "Qs\\sso\\": "sso/"
+        }
+    }
+}

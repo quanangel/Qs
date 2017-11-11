@@ -9,7 +9,7 @@
             "email": "quanangel@outlook.com"
         }
     ],
-    "minimum-stability": "dev",
+    "version": "1.0.0",
     "require": {
         "php": ">=5.6"
     },

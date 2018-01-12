@@ -2,8 +2,8 @@
 /**
  * File Name:Image.php
  * Auth:Qs
- * Name:
- * Note:
+ * Name:生成水印功能
+ * Note:主要使用PHP GD扩展
  * Time:2018/1/3  10:33
  **/
 namespace Qs\other;
@@ -33,6 +33,9 @@ Class Image{
     // 生成图片后缀
     private $output_image_type = 'jpg';
 
+    public function get_gd_info(){
+        return gd_info();
+    }
 
     // 实例
     protected static $handler;

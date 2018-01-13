@@ -12,14 +12,14 @@ Class QsRedis {
     protected $tag; // 缓存名的标签
     protected $handler = null;
     protected $_config = array(
-        'HOST'       => '127.0.0.1',
-        'PORT'       => 6379,
-        'PASSWORD'   => '123456', //验证密码
-        'SELECT'     => 0,
-        'TIMEOUT'    => 0,
-        'EXPIRE'     => 3600, // 有效时间
-        'PERSISTENT' => false,
-        'PREFIX'     => 'now_',
+        'HOST'       => '127.0.0.1',    // 地址
+        'PORT'       => 6379,           // 端口
+        'PASSWORD'   => '123456',       // 验证密码
+        'SELECT'     => 0,              // 选择的表
+        'TIMEOUT'    => 0,              //
+        'EXPIRE'     => 3600,           // 有效时间
+        'PERSISTENT' => false,          //
+        'PREFIX'     => 'now_',         // 前缀
     );
     public function __construct($_config = []) {
         if (!empty($_config)) $this->_config = array_merge($this->_config, $_config); // 更新配置
@@ -27,13 +27,9 @@ Class QsRedis {
         $this->handler = new \Redis();
         $this->handler->connect($this->_config['HOST'],$this->_config['PORT'],$this->_config['TIMEOUT']);
 
-        if ( !empty( $this->_config['PASSWORD'] ) ) {
-            $this->handler->auth($this->_config['PASSWORD']);
-        }
+        if ( !empty( $this->_config['PASSWORD'] ) ) $this->handler->auth($this->_config['PASSWORD']);
 
-        if ( !empty( $this->_config['SELECT'] ) ) {
-            $this->handler->select($this->_config['SELECT']);
-        }
+        if ( !empty( $this->_config['SELECT'] ) ) $this->handler->select($this->_config['SELECT']);
     }
 
     /*
@@ -59,9 +55,7 @@ Class QsRedis {
      */
     public function get($name, $default = false) {
         $value = $this->handler->get($name);
-        if( is_null($value) ) {
-            return $default;
-        }
+        if( is_null($value) ) return $default;
         $jsonData = json_decode($value, true);
         // 判断$jsonData是否完全等于NULL，是：直接返回$value的值，否：返回JSON格式化的数组$jsonData
         return (null === $jsonData) ? $value : $jsonData;
@@ -80,9 +74,8 @@ Class QsRedis {
     public function set($name, $value, $expire = null) {
         $expire = is_null($expire) ? $this->_config['EXPIRE'] : $expire;
 
-        if ( $this->tag && !$this->has($name) ) {
-            $first = true;
-        }
+        if ( $this->tag && !$this->has($name) ) {$first = true;}
+
         $key = $this->getRealKey($name);
         $value = ( is_object($value) || is_array($value) ) ? json_encode($value, true) : $value;
         if ( is_int($expire) && $expire ) {
@@ -133,8 +126,7 @@ Class QsRedis {
      * @return  string
      * Time:2017/10/18 17:04
      */
-    public function getRealKey($name)
-    {
+    public function getRealKey($name){
         return $this->_config['PREFIX'] . $name;
     }
 

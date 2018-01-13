@@ -29,20 +29,14 @@ Class qsAuth{
      * @return boolean           通过验证返回true;失败返回false
      * Time:2017/7/19 11:06
      */
-    public function check($name, $uid, $type = 1)
-    {
-        if (!$this->_config['AUTH_ON']) {
-            return true;
-        }
+    public function check($name, $uid, $type = 1){
+        if (!$this->_config['AUTH_ON']) return true;
+
         $authList = $this->getAuthList($uid, $type); //获取用户需要验证的所有有效规则列表
-        if (is_string($name)) {
-            $name = strtolower($name);
-        }
+        if ( is_string($name) ) $name = strtolower($name);
         $list = array(); //保存验证通过的规则名
         foreach ($authList as $auth) {
-            if($name==$auth){
-                return true;
-            }
+            if ( $name == $auth ) return true;
         }
         return false;
     }
@@ -61,7 +55,7 @@ Class qsAuth{
         if (isset($groups[$uid])) {
             return $groups[$uid];
         }
-        $result=Db::table($this->_config['AUTH_GROUP_ACCESS'])
+        $result = Db::table($this->_config['AUTH_GROUP_ACCESS'])
             ->alias('a')
             ->where(['user_id'=>$uid,'status'=>1])
             ->join($this->_config['AUTH_GROUP'].' b','a.group_id=b.id')

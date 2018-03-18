@@ -33,6 +33,7 @@ Class Image{
     // 生成图片后缀
     private $output_image_type = 'jpg';
 
+    
     public function get_gd_info(){
         return gd_info();
     }

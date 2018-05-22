@@ -18,7 +18,8 @@
             "Qs\\auth\\": "auth/",
             "Qs\\phpanalysis\\": "phpanalysis/",
             "Qs\\redis\\": "redis/",
-            "Qs\\sso\\": "sso/"
+            "Qs\\sso\\": "sso/",
+            "Qs\\log\\": "log/",
         }
     }
 }

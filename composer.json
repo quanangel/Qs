@@ -19,7 +19,7 @@
             "Qs\\phpanalysis\\": "phpanalysis/",
             "Qs\\redis\\": "redis/",
             "Qs\\sso\\": "sso/",
-            "Qs\\log\\": "log/",
+            "Qs\\log\\": "log/"
         }
     }
 }

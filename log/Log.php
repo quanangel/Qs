@@ -8,7 +8,7 @@ class Log{
     protected static $instance;
 
     // 默认日记目录
-    private $_dirName = __DIR__ . DS . 'log' . DS;
+    private $_dirName = __DIR__ . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR;
     // 默认日记文件名
     private $_fileName = '';
     // 默认后缀名
@@ -24,7 +24,7 @@ class Log{
      **/
     private function __construct($options = []) {
         if ( empty($this->_fileName) ) $this->_fileName = date('Ymd',time());
-        $this->_dirName .= date('Ymd',time()) . DS;
+        $this->_dirName .= date('Ymd',time()) . DIRECTORY_SEPARATOR;
         // 如有传入参数则引用
         foreach ( $options as $name => $value ) { $this->$name = $value;}
     }

@@ -9,7 +9,7 @@
 namespace Qs\auth;
 use think\Db;
 Class qsAuth{
-    protected $_config=array(
+    protected $_config = array(
         'AUTH_ON'           => true, // 认证开关
         'AUTH_TYPE'         => 1, // 认证方式，1为实时认证；
         'AUTH_GROUP'        => 'yl_admin_group', // 用户组数据表名

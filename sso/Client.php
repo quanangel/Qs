@@ -43,7 +43,7 @@ Class Client{
     }
 
 
-    public function client_login($username, $password, $url = '') {
+    public function client_login($username, $password, $type = 'login', $url = '') {
 
         if ( empty($username) || empty($password) ) return '用户密码错误';
         $url = empty($url) ? $this->sso_url : $url;
@@ -52,7 +52,7 @@ Class Client{
         $post_date['secret'] = $this->sso_secret;
         $post_date['username'] = $username;
         $post_date['password'] = $password;
-        $post_date['type'] = 'login';
+        $post_date['type'] = $type;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER,0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

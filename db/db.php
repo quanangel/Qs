@@ -4,7 +4,7 @@ namespace Qs\db;
 
 class db {
 
-    protected $_config = [
+    protected static $_config = [
         'status'    => 1,
         'sqlname'   => '',
         'host'      => '127.0.0.1',
@@ -15,26 +15,20 @@ class db {
         'charset'   => 'utf8',
     ];
 
-    private $_className = '';
-    protected $_instance = null;
+    private static $_className = '';
+    protected static $_instance = null;
 
-    public function __construct($options = [] ){
+    public static function init($options = []) {
         // 如有传入参数则引用
-        foreach ( $options as $name => $value ) { $this->_config[$name] = $value;}
-        if ($this->_config['status'] == 0 ) return false;
-        switch ($this->_config['sqlname']) {
+        foreach ( $options as $name => $value ) { self::$_config[$name] = $value;}
+        if (self::$_config['status'] == 0 ) return false;
+        switch (self::$_config['sqlname']) {
             case 'mysql': 
-                $this->_className = '\\Qs\\db\\lib\\mysql';
+                self::$_className = '\\Qs\\db\\lib\\mysql';
                 break;
             default: break;
         }
-        if ( is_null($this->_instance) && $this->_className != '' ) $this->_instance = $this->_className::instance($this->_config);
-        return $this->_instance;
-    }
-
-    public static function instance($options = []) {
-        if ( is_null(self::$_instance) ) self::$_instance = new static($options);
-        if (self::$_instance->_config['status'] == 0 ) return false;
+        if ( is_null(self::$_instance) && self::$_className != '' ) self::$_instance = self::$_className::instance(self::$_config);
         return self::$_instance;
     }
 

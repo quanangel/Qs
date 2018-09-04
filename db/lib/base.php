@@ -17,6 +17,9 @@ class base {
         'charset'   => 'utf8',
     ];
 
+    protected $_alias = [];
+    protected $_sql = '';
+
     protected static $instance;
     protected $connect = null;
 
@@ -35,7 +38,7 @@ class base {
     public static function instance($options = []) {
         if ( is_null(self::$instance) ) self::$instance = new static($options);
         if (self::$instance->_config['status'] == 0 ) return false;
-        return self::$instance;
+        return self::$instance->connect;
     }
 
     protected function make_dsn() {

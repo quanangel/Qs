@@ -25,7 +25,7 @@ class base {
         foreach ( $options as $name => $value ) { $this->_config[$name] = $value;}
         if ( is_null($this->connect) && $this->_config['status'] == 1 ) {
             try {
-                $this->connect = new \PDO($this->make_dsn, $this->_config['user'], $this->_config['pwd']);
+                $this->connect = new \PDO($this->make_dsn(), $this->_config['user'], $this->_config['pwd']);
             } catch (\Exception $e) {
                 Log::instance()->save($e->getMessage(),'db_error');
             }

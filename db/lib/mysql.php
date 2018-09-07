@@ -48,6 +48,7 @@ class mysql extends base {
     }
     public function alias($alias) {
         $this->option['alias'] = $alias;
+        return $this;
     }
 
     public function select() {

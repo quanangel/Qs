@@ -112,9 +112,9 @@ class base {
     }
 
     // 生成表名
-    protected function parseTable($value = '') {
-        if ( !is_string($string) ) return '';
-        return ' `' . $string . '`';
+    protected function parseTable($table = '') {
+        if ( !is_string($table) ) return '';
+        return ' `' . $table . '`';
     }
 
     // 生成强制使用索引语句

@@ -55,10 +55,10 @@ class mysql extends base {
         $sql = str_replace(
             ['%TABLE%', '%ALIAS%', '%DISTINCT%', '%FIELD%', '%JOIN%', '%WHERE%', '%GROUP%', '%HAVING%', '%ORDER%', '%LIMIT%', '%UNION%', '%LOCK%', '%COMMENT%', '%FORCE%'],
             [
-                $this->parseTable($this->option['table']),
+                $this->parseTable($this->option['table'] ),
                 $this->option['alias'],
-                $this->parseDistinct($this->option['distinct']),
-                $this->parseField($this->option['field']),
+                $this->parseDistinct($this->option['distinct'] ),
+                $this->parseField($this->option['field'] ),
                 $this->option['join'],
                 $this->parseWhere($this->option['where']),
                 $this->parseGroup($this->option['group']),

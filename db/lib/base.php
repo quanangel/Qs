@@ -41,7 +41,22 @@ class base {
         'not null' => 'NOT NULL',
     ];
 
-    protected $option = ['join' => ''];
+    protected $option = [
+        'table' => '',
+        'alias' => '',
+        'distinct' => '',
+        'field' => '',
+        'join' => '',
+        'where' => '',
+        'group' => '',
+        'having' => '',
+        'order' => '',
+        'limit' => '',
+        'union' => '',
+        'lock' => '',
+        'comment' => '',
+        'force' => '',
+    ];
 
     // SQL语句
     protected $selectSql    = 'SELECT%DISTINCT% %FIELD% FROM %TABLE%%ALIAS%%FORCE%%JOIN%%WHERE%%GROUP%%HAVING%%UNION%%ORDER%%LIMIT%%LOCK%%COMMENT%';

@@ -13,6 +13,7 @@ class db {
         'pwd'       => '',
         'port'      => '3306',
         'charset'   => 'utf8',
+        'prefix'    => '',
     ];
 
     private static $_className = '';

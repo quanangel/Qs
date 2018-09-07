@@ -8,110 +8,74 @@ use Qs\log\Log;
 
 class mysql extends base {
 
-
-
     public function __construct($options) {
         parent::__construct($options);
     }
 
-    public function field($string) {
-        try {
-            if ( !is_string($string) ) throw new exception("field语句的参数必须为字符串");
-            $this->_alias['field'] = $string;
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+    public function field($field) {
+        $this->option['field'] = $this->parseField($field);
         return $this;
     }
 
-    public function table($string) {
-        try {
-            if ( !is_string($string) ) throw new exception("table语句的参数必须为字符串");
-            $this->_alias['table'] = $string;
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+    public function table($table){
+        $this->option['table'] = $this->parseTable($table);
         return $this;
     }
 
     public function where($where) {
-        try {
-            $this->_alias['where'] = '';
-            if ( is_array($where) ) {
-                foreach ($where as $k => $v) {
-                    if ( is_array($v) ) {
-                        $this->_alias['where'] .= " `$k`";
-                        foreach ( $v as $vv ) {
-                            $this->_alias['where'] .= " $vv";
-                        }
-                        $this->_alias['where'] .= " and";
-                    } else {
-                        $this->_alias['where'] .= " `$k` = '$v' and";
-                    }
-                }
-                $this->_alias['where'] = rtrim($this->_alias['where'], 'and');
-            } else if ( is_string($where) ) {
-                $this->_alias['where'] = $where;
-            } else {
-                throw new exception('查询条件只能为数组或字符串');
-            }
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+        $this->option['where'] = $where;
         return $this;
     }
 
-    public function limit($limit, $num = '') {
-        try {
-            if ( is_numeric($limit) ) {
-                if ( is_numeric($num) ) {
-                    $this->_alias['limit'] = "$limit,$num";
-                } else {
-                    $this->_alias['limit'] = $limit;
-                }
-            } else {
-                throw new exception('limit语句的参数必须为数字');
-            }
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+    public function limit($limit) {
+        $this->option['limit'] = $limit;
         return $this;
     }
 
-    public function order($string) {
-        try {
-            if ( !is_string($string) ) throw new exception("order语句的参数必须为字符串");
-            $this->_alias['order'] = $string;
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+    public function order($order) {
+        $this->option['order'] = $order;
         return $this;
     }
 
-    public function group($string) {
-        try {
-            if ( !is_string($string) ) throw new exception("group语句的参数必须为字符串");
-            $this->_alias['group'] = $string;
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+    public function group($group) {
+        $this->option['group'] = $group;
         return $this;
+    }
+
+    public function join($table,$where,$join = 'INNER'){
+        $this->option['join'] .= $this->parseJoin($table,$where,$join = 'INNER');
+        return $this;
+    }
+    public function alias($alias) {
+        $this->option['alias'] = $alias;
     }
 
     public function select() {
-        try {
-
-        } catch (\Exception $e) {
-            Log::instance()->save($e->getMessage(),'db_mysql_error');
-        }
+        $sql = str_replace(
+            ['%TABLE%', '%ALIAS%', '%DISTINCT%', '%FIELD%', '%JOIN%', '%WHERE%', '%GROUP%', '%HAVING%', '%ORDER%', '%LIMIT%', '%UNION%', '%LOCK%', '%COMMENT%', '%FORCE%'],
+            [
+                $this->parseTable($options['table']),
+                $options['alias'],
+                $this->parseDistinct($options['distinct']),
+                $this->parseField($options['field']),
+                $options['join'],
+                $this->parseWhere($options['where']),
+                $this->parseGroup($options['group']),
+                $this->parseHaving($options['having']),
+                $this->parseOrder($options['order']),
+                $this->parseLimit($options['limit']),
+                $this->parseUnion($options['union']),
+                $this->parseLock($options['lock']),
+                $this->parseComment($options['comment']),
+                $this->parseForce($options['force']),
+            ], $this->selectSql);
+        return $sql;
     }
 
     public function update() {
-
     }
 
     public function add() {
-
     }
 
 }

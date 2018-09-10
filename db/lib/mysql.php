@@ -47,7 +47,7 @@ class mysql extends base {
         return $this;
     }
     public function alias($alias) {
-        $this->option['alias'] = $alias;
+        $this->option['alias'] = $this->parseAlias($alias);
         return $this;
     }
 
@@ -55,7 +55,7 @@ class mysql extends base {
         $sql = str_replace(
             ['%TABLE%', '%ALIAS%', '%DISTINCT%', '%FIELD%', '%JOIN%', '%WHERE%', '%GROUP%', '%HAVING%', '%ORDER%', '%LIMIT%', '%UNION%', '%LOCK%', '%COMMENT%', '%FORCE%'],
             [
-                $this->parseTable($this->option['table'] ),
+                $this->option['table'],
                 $this->option['alias'],
                 $this->parseDistinct($this->option['distinct'] ),
                 $this->parseField($this->option['field'] ),
@@ -70,7 +70,8 @@ class mysql extends base {
                 $this->parseComment($this->option['comment']),
                 $this->parseForce($this->option['force']),
             ], $this->selectSql);
-        return $sql;
+        $array =  $this->connect->query($sql)->fetchAll( \PDO::FETCH_ASSOC );
+        return $array;
     }
 
     public function update() {

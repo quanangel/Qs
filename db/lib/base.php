@@ -59,11 +59,12 @@ class base {
     ];
 
     // SQL语句
-    protected $selectSql    = 'SELECT%DISTINCT% %FIELD% FROM %TABLE%%ALIAS%%FORCE%%JOIN%%WHERE%%GROUP%%HAVING%%UNION%%ORDER%%LIMIT%%LOCK%%COMMENT%';
+    protected $selectSql    = 'SELECT%DISTINCT%%FIELD% FROM %TABLE%%ALIAS%%FORCE%%JOIN%%WHERE%%GROUP%%HAVING%%UNION%%ORDER%%LIMIT%%LOCK%%COMMENT%';
     protected $insertSql    = '%INSERT% INTO %TABLE% (%FIELD%) VALUES (%DATA%) %COMMENT%';
     protected $insertAllSql = '%INSERT% INTO %TABLE% (%FIELD%) %DATA% %COMMENT%';
     protected $updateSql    = 'UPDATE %TABLE% SET %SET% %JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
     protected $deleteSql    = 'DELETE FROM %TABLE% %USING% %JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
+    protected $joinSql      = '%JOIN%';
 
     protected $aliasName = '';
 
@@ -104,7 +105,8 @@ class base {
 
     //  生成别名
     protected function parseAlias($alias = '') {
-        return $alias ? ' `'. $alias . '`' : '';
+        $alias = empty($alias) ? '' : '`'. $alias . '` ';
+        return $alias;
     }
 
     // 生成输出字段
@@ -121,7 +123,7 @@ class base {
                     $array[] = $this->parseKey($k) . ' AS ' . $this->parseKey($v);
                 }
             }
-            $value = ' ' . impload(',',$array);
+            $value = ' ' . implode(',',$array);
         }
         return $value;
     }
@@ -129,7 +131,7 @@ class base {
     // 生成表名
     protected function parseTable($table = '') {
         if ( !is_string($table) ) return '';
-        return ' `' . $table . '`';
+        return '`' . $table . '` ';
     }
 
     // 生成强制使用索引语句
@@ -151,7 +153,7 @@ class base {
                     $array[] = $this->parseKey($k) . '"' . $v . '"';
                 }
             }
-            $value = ' WHERE (' . impload($exp,$array) . ')';
+            $value = ' WHERE (' . implode($exp,$array) . ')';
         }
         return $value;
     }
@@ -167,14 +169,14 @@ class base {
 
     // 生成排序语句
     protected function parseOrder($order = '') {
-        if ( emtpy($order) || !is_string($order) ) return '';
+        if ( empty($order) || !is_string($order) ) return '';
         $order = explode(',',$order);
         $array = [];
         foreach ( $order as $value ) {
             $value = explode(' ',$value);
             $array[] = $this->parseKey(array_shift($value)) . ' ' . strtoupper(array_shift($value));
         }
-        $order = ' ORDER BY' . impolde(',',$array);
+        $order = ' ORDER BY' . implode(',',$array);
         return $order;
     }
 
@@ -188,17 +190,20 @@ class base {
 
     protected function parseJoin($table,$where,$join = 'INNER'){
         if ( empty($join) || !is_array($table) ) return '';
-        
+        ' LEFT JOIN `zd_order` `b` ON `b`.`buy_id`=`a`.`user_id`';
+        $str = ' ' . strtoupper($join) .' JOIN `' . key($table) . '` `' . array_shift($table) . '` ON ' . $where;
+
+        return $str;
     }
 
     protected function parseKey($value){
-        $array = expload('.',$value);
+        $array = explode('.',$value);
         if ( count($array) > 1 ) {
             $value = '';
             foreach ($array as $k => $v) {
                 $array[$k] = '`' . $v . '`';
             }
-            $value = impload('.',$array);
+            $value = implode('.',$array);
         } else {
             $value = '`' . $value . '`';
         }

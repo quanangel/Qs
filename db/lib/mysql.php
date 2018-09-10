@@ -70,14 +70,70 @@ class mysql extends base {
                 $this->parseComment($this->option['comment']),
                 $this->parseForce($this->option['force']),
             ], $this->selectSql);
-        $array =  $this->connect->query($sql)->fetchAll( \PDO::FETCH_ASSOC );
-        return $array;
+        $return =  $this->connect->query($sql)->fetchAll( \PDO::FETCH_ASSOC );
+        $this->reset_option();
+        return $return;
     }
 
-    public function update() {
+    public function update($set =[]) {
+        $sql = str_replace(
+            ['%TABLE%', '%SET%', '%JOIN%', '%WHERE%', '%ORDER%', '%LIMIT%', '%LOCK%', '%COMMENT%'],
+            [
+                $this->option['table'],
+                $this->parseSet($set),
+                $this->option['join'],
+                $this->parseWhere($this->option['where']),
+                $this->parseOrder($this->option['order']),
+                $this->parseLimit($this->option['limit']),
+                $this->parseLock($this->option['lock']),
+                $this->parseComment($this->option['comment']),
+            ], $this->updateSql);
+        $return = $this->connect->exec($sql);
+        $this->reset_option();
+        return $return;
     }
 
-    public function add() {
+    public function insert($add, $replace = false) {
+        $fields = array_keys($add);
+        $values = array_values($add);
+
+        $sql = str_replace(
+            ['%INSERT%', '%TABLE%', '%FIELD%', '%DATA%', '%COMMENT%'],
+            [
+                $replace ? 'REPLACE' : 'INSERT',
+                $this->option['table'],
+                implode(' , ', $fields),
+                implode(' , ', $values),
+                $this->parseComment($this->option['comment']),
+            ], $this->insertSql);
+        $return = $this->connect->exec($sql);
+        $this->reset_option();
+        return $return;
+    }
+
+    public function delete(){
+        'DELETE FROM %TABLE%%USING%%JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
+        $sql = str_replace(
+            ['%TABLE%', '%USING%', '%JOIN%', '%WHERE%', '%ORDER%', '%LIMIT%', '%LOCK%', '%COMMENT%'],
+            [
+                $this->option['table'],
+                '',
+                $this->option['join'],
+                $this->parseWhere($this->option['where']),
+                $this->parseOrder($this->option['order']),
+                $this->parseLimit($this->option['limit']),
+                $this->parseLock($this->option['lock']),
+                $this->parseComment($this->option['comment']),
+            ], $this->deleteSql);
+        $return = $this->connect->exec($sql);
+        $this->reset_option();
+        return $return;
+    }
+    
+    protected function reset_option(){
+        foreach ($this->option as $k => $v) {
+            $this->option[$k] = '';
+        }
     }
 
 }

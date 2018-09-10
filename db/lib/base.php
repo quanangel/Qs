@@ -64,7 +64,6 @@ class base {
     protected $insertAllSql = '%INSERT% INTO %TABLE% (%FIELD%) %DATA% %COMMENT%';
     protected $updateSql    = 'UPDATE %TABLE% SET %SET% %JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
     protected $deleteSql    = 'DELETE FROM %TABLE% %USING% %JOIN% %WHERE% %ORDER%%LIMIT% %LOCK%%COMMENT%';
-    protected $joinSql      = '%JOIN%';
 
     protected $aliasName = '';
 
@@ -193,6 +192,15 @@ class base {
         ' LEFT JOIN `zd_order` `b` ON `b`.`buy_id`=`a`.`user_id`';
         $str = ' ' . strtoupper($join) .' JOIN `' . key($table) . '` `' . array_shift($table) . '` ON ' . $where;
 
+        return $str;
+    }
+
+    protected function parseSet($set = '') {
+        if (!is_array($set)) return $set;
+        $str = '';
+        foreach ($set as $k=>$v) {
+            $str .= $this->parseKey($k) . '="' . $v . '"';
+        }
         return $str;
     }
 

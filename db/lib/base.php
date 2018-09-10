@@ -149,7 +149,7 @@ class base {
                 if ( is_array($v) ) {
                     $array[] = $this->parseKey($k) . $this->exp[array_shift($v)] . '"' . array_shift($v) . '"';
                 } else {
-                    $array[] = $this->parseKey($k) . '"' . $v . '"';
+                    $array[] = $this->parseKey($k) . '="' . $v . '"';
                 }
             }
             $value = ' WHERE (' . implode($exp,$array) . ')';

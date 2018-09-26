@@ -32,5 +32,4 @@ class db {
         if ( is_null(self::$_instance) && self::$_className != '' ) self::$_instance = self::$_className::instance(self::$_config);
         return self::$_instance;
     }
-
 }

@@ -70,6 +70,7 @@ class base {
     protected static $instance;
     protected $connect = null;
 
+    // 初始化
     public function __construct($options = []) {
         // 如有传入参数则引用
         foreach ( $options as $name => $value ) { $this->_config[$name] = $value;}
@@ -82,12 +83,14 @@ class base {
         }
     }
 
+    // 实例化
     public static function instance($options = []) {
         if ( is_null(self::$instance) ) self::$instance = new static($options);
         if (self::$instance->_config['status'] == 0 ) return false;
         return self::$instance;
     }
 
+    // 生成DSN语句
     protected function make_dsn() {
         $dsn =  $this->_config['sqlname'] . ":host=" . $this->_config['host'] . ';';
         $dsn .= "dbname=" . $this->_config['dbname'] . ';';
@@ -187,6 +190,7 @@ class base {
         return ' LIMIT ' . $limit;
     }
 
+    // 生成JOIN语句
     protected function parseJoin($table,$where,$join = 'INNER'){
         if ( empty($join) || !is_array($table) ) return '';
         ' LEFT JOIN `zd_order` `b` ON `b`.`buy_id`=`a`.`user_id`';
@@ -195,6 +199,7 @@ class base {
         return $str;
     }
 
+    // 生成添加数据语句
     protected function parseSet($set = '') {
         if (!is_array($set)) return $set;
         $str = '';
@@ -204,6 +209,7 @@ class base {
         return $str;
     }
 
+    // 关键字处理
     protected function parseKey($value){
         $array = explode('.',$value);
         if ( count($array) > 1 ) {

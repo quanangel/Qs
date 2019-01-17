@@ -18,8 +18,9 @@ Class QsRedis {
         'SELECT'     => 0,              // 选择的表
         'TIMEOUT'    => 0,              //
         'EXPIRE'     => 3600,           // 有效时间
-        'PERSISTENT' => false,          //
+        'PERSISTENT' => False,          // 
         'PREFIX'     => 'now_',         // 前缀
+        'PREFIX_STATUS' => True,         // 是否使用前缀
     );
     public function __construct($_config = []) {
         if (!empty($_config)) $this->_config = array_merge($this->_config, $_config); // 更新配置
@@ -41,6 +42,7 @@ Class QsRedis {
      * Time:2017/10/18 17:07
      */
     public function has($name) {
+        $name = $this->_config['PREFIX_STATUS'] ? $this->getRealKey($name) : $name;
         return $this->handler->get($name) ? true : false;
     }
 
@@ -54,6 +56,7 @@ Class QsRedis {
      * Time:2017/10/18 17:36
      */
     public function get($name, $default = false) {
+        $name = $this->_config['PREFIX_STATUS'] ? $this->getRealKey($name) : $name;
         $value = $this->handler->get($name);
         if( is_null($value) ) return $default;
         $jsonData = json_decode($value, true);
@@ -76,7 +79,7 @@ Class QsRedis {
 
         if ( $this->tag && !$this->has($name) ) {$first = true;}
 
-        $key = $this->getRealKey($name);
+        $key = $this->_config['PREFIX_STATUS'] ? $this->getRealKey($name) : $name;
         $value = ( is_object($value) || is_array($value) ) ? json_encode($value, true) : $value;
         if ( is_int($expire) && $expire ) {
             $result = $this->handler->setex($key, $expire, $value);
@@ -96,6 +99,7 @@ Class QsRedis {
      * Time:2017/10/18 23:57
      */
     public function rm($name) {
+        $name = $this->_config['PREFIX_STATUS'] ? $this->getRealKey($name) : $name;
         return $this->handler->del($name);
     }
 

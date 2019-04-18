@@ -1,11 +1,12 @@
 <?php
-/*
- * File Name:QsRedis.php
- * Auth:Qs
- * Name:Redis数据缓存
- * Note:
- * Time:2017/10/18 16:32
- */
+/**
+ * @Author : Qs
+ * @name   : Redis操作
+ * @Note   : 
+ * @Time   : 2019/4/19 1:47
+ * @see    : PHP-Redis扩展项目地址 https://github.com/phpredis/phpredis
+ * @see    : Redis命令参考地址 http://redisdoc.com/index.html
+ **/
 namespace Qs\redis;
 
 Class QsRedis {

@@ -57,7 +57,7 @@ Class QsRedis {
     public function get($name, $prefix = null) {
         $name = $this->getRealKey($name, $prefix);
         $value = $this->handler->get($name);
-        if( is_null($value) ) return false;
+        if ( is_null($value) ) return false;
         $jsonData = json_decode($value, true);
         // 判断$jsonData是否完全等于NULL，是：直接返回$value的值，否：返回JSON格式化的数组$jsonData
         return (null === $jsonData) ? $value : $jsonData;
@@ -66,23 +66,22 @@ Class QsRedis {
     /**
      * @Author : Qs
      * @Name   : 设置字符串类型的键值
-     * @Note   : // TODO: 添加SET带有的EX、PX、NX、XX http://redisdoc.com/string/set.html
+     * @Note   : 
      * @Time   : 2017/10/18 23:49
      * @param   string                  $name    设置的键名
      * @param   object|array|string     $value   设置的值
-     * @param   integer                 $expire  有效时间（秒）
+     * @param   array                   $option  参数 ['nx','xx','ex'=>3600,'px'=>360000],nx只在键不存在时,才对键进行设置操作、xx只在键已经存在时,才对键进行设置操作、ex保存秒数、px保存毫秒数
      * @param   boolean|null            $prefix  是否需要前缀
      * @return  boolean
      **/
-    public function set($name, $value, $expire = null, $prefix = null) {
-        $expire = is_null($expire) ? $this->_config['EXPIRE'] : $expire;
-
-        $key = $this->getRealKey($name);
+    public function set($name, $value, $options = array(), $prefix = null) {
+        if ( empty($options) ) $options['ex'] = $this->_config['EXPIRE'];
+        $key = $this->getRealKey($name, $prefix);
         $value = ( is_object($value) || is_array($value) ) ? json_encode($value, true) : $value;
-        if ( is_int($expire) && $expire ) {
-            $result = $this->handler->setex($key, $expire, $value);
+        if ( is_int($value) ) {
+            $result = $this->handler->setEx($key, ( iset($options['ex']) ? $options['ex'] : $this->_config['EXPIRE'] ), $value);
         } else {
-            $result = $this->handler->set($key, $value);
+            $result = $this->handler->set($key, $value, $options);
         }
         return $result;
     }
@@ -97,7 +96,7 @@ Class QsRedis {
      * @return  boolean
      **/
     public function rm($name, $prefix = null) {
-        $name = $this->getRealKey($name);
+        $name = $this->getRealKey($name, $prefix);
         return $this->handler->del($name);
     }
 

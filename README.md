@@ -4,5 +4,5 @@ Composer package name: quanangel/qs-thinkphp5
 
 
 ### Working Notes
- * redis list action function (not finished)
+ * redis hash action function (not finished)
  * all class don't use ThinkPHP Class (not finished)

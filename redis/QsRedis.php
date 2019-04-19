@@ -33,6 +33,7 @@ Class QsRedis {
         if ( !empty( $this->_config['SELECT'] ) ) $this->handler->select($this->_config['SELECT']);
     }
 
+    /*-- 字符串类型 START --*/
     /**
      * @Author : Qs
      * @Name   : 判断是否存在该字符串类型的键
@@ -86,7 +87,9 @@ Class QsRedis {
         }
         return $result;
     }
+    /*-- 字符串类型 END --*/
 
+    /*-- 列表类型 START --*/
     /**
      * @Author : Qs
      * @Name   : 获取列表类型的键值长度
@@ -99,6 +102,21 @@ Class QsRedis {
     public function llen($key, $prefix = null) {
         $key = $this->getRealKey($key, $prefix);
         return $this->handler->lLen($key);      
+    }
+
+    /**
+     * @Author : Qs
+     * @name   : 获取列表里某个INDEX的值
+     * @Note   : 
+     * @Time   : 2019/4/20 0:08
+     * @param    string        $key      需要查询的键名
+     * @param    integer       $index    查询范围的开始位置
+     * @param    boolean|null  $prefix   是否需要前缀
+     * @return   string|false
+     **/
+    public function lget($key, $index, $prefix = null) {
+        $key = $this->getRealKey($key, $prefix);
+        return $this->handler->lGet($key, $index);
     }
 
     /**
@@ -138,6 +156,26 @@ Class QsRedis {
 
     /**
      * @Author : Qs
+     * @name   : 在列表插入的值
+     * @Note   : 
+     * @Time   : 2019/4/20 0:37
+     * @param    string          $key        添加的键名
+     * @param    string          $value      添加的值
+     * @param    string          $pivot      列表中轴位
+     * @param    string          $position   插入是中轴位前或后：befort、after
+     * @param    boolean|null    $prefix     是否需要前缀
+     * @return   integer|-1
+     **/
+    public function linsert($key, $value, $pivot, $position = 'after', $prefix = null) {
+        $key = $this->getRealKey($key, $prefix);
+        $tmp = false;
+        if ('befort' == $position) $tmp = $this->handler->lInsert($key, Redis::BEFORT, $pivot, $value);
+        if ('after' == $position) $tmp = $this->handler->lInsert($key, Redis::AFTER, $pivot, $value);
+        return $tmp;
+    }
+
+    /**
+     * @Author : Qs
      * @Name   : 将列头或列尾的值弹出该列表
      * @Note   : 
      * @Time   : 2019/4/19 17:24
@@ -156,7 +194,7 @@ Class QsRedis {
 
     /**
      * @Author : Qs
-     * @Name   : 删除列表内某个值
+     * @Name   : 删除列表内某个index的值
      * @Note   : 
      * @Time   : 2019/4/19 17:39
      * @param    string          $key      添加的键名
@@ -169,6 +207,25 @@ Class QsRedis {
         $key = $this->getRealKey($key, $prefix);
         return $this->handler->lRem($key, $value, $count);
     }
+
+    /**
+     * @Author : Qs
+     * @name   : 修整甘个列表类型的键值
+     * @Note   : 
+     * @Time   : 2019/4/20 0:23
+     * @param    string         $key     需要修正的键名
+     * @param    integer        $start   旧的列表开始位置，新的列表的列头
+     * @param    integer        $end     旧的列表结束位置，新的列表的列尾
+     * @param    boolean|null   $prefix  是否需要前缀
+     * @return   array|false
+     **/
+    public function ltrim($key, $start = 0, $end = -1, $prefix = null) {
+        $key = $this->getRealKey($key, $prefix);
+        return $this->handler->lTrim($key, $start, $end);
+    }
+    /*-- 列表类型 END --*/
+
+    
 
     /**
      * @Author : Qs

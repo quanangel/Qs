@@ -87,6 +87,25 @@ Class QsRedis {
         }
         return $result;
     }
+
+    /**
+     * @Author : Qs
+     * @Name   : 自增/自减
+     * @Note   : 
+     * @Time   : 2019/4/22 15:56
+     * @param   string                  $key     设置的键名
+     * @param   integer                 $step    自增或自减的量，负数为自减，正数为自增  
+     * @param   boolean|null            $prefix  是否需要前缀
+     * @param   integer
+     **/
+    public function operate($key, $step = 1, $prefix){
+        $key = $this->getRealKey($key, $prefix);
+        $tmp = false;
+        if ( $step > 0 ) $tmp = $this->handler->incr($key, $step);
+        if ( $step < 0 ) $tmp = $this->handler->decr($key, $step);
+        return $tmp;
+    }
+
     /*-- 字符串类型 END --*/
 
     /*-- 列表类型 START --*/

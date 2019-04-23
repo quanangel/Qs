@@ -6,6 +6,7 @@
  * @Time   : 2019/4/19 1:47
  * @see    : PHP-Redis扩展项目地址 https://github.com/phpredis/phpredis
  * @see    : Redis命令参考地址 http://redisdoc.com/index.html
+ * @see    : 简易秒杀方案 https://segmentfault.com/a/1190000018840987
  **/
 namespace Qs\redis;
 

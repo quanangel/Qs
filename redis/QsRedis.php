@@ -286,8 +286,9 @@ Class QsRedis {
      * @return  string
      **/
     public function getRealKey($key, $prefix = null){
-        $prefix = is_null($prefix) ? $this->_config['PREFIX_STATUS'] : $prefix;
-        $key = $prefix ? $this->_config['PREFIX'] . $key : $key;
+        // $prefix = is_null($prefix) ? $this->_config['PREFIX_STATUS'] : $prefix;
+        $prefix = is_null($prefix) ? $this->_config['PREFIX'] : $prefix;
+        $key = $this->_config['PREFIX_STATUS'] ? $prefix . $key : $key;
         return $key;
     }
 

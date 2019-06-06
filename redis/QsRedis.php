@@ -82,7 +82,7 @@ Class QsRedis {
         $key = $this->getRealKey($key, $prefix);
         $value = ( is_object($value) || is_array($value) ) ? json_encode($value, true) : $value;
         if ( is_int($value) ) {
-            $result = $this->handler->setEx($key, ( iset($options['ex']) ? $options['ex'] : $this->_config['EXPIRE'] ), $value);
+            $result = $this->handler->setEx($key, ( isset($options['ex']) ? $options['ex'] : $this->_config['EXPIRE'] ), $value);
         } else {
             $result = $this->handler->set($key, $value, $options);
         }

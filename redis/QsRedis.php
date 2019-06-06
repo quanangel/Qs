@@ -79,10 +79,12 @@ Class QsRedis {
      **/
     public function set($key, $value, $options = array(), $prefix = null) {
         if ( empty($options) ) $options['ex'] = $this->_config['EXPIRE'];
+        $timeless = false;
+        if ( is_array($options) && count($options) == 1 && $options['ex'] == 0 ) $timeless = true;
         $key = $this->getRealKey($key, $prefix);
         $value = ( is_object($value) || is_array($value) ) ? json_encode($value, true) : $value;
-        if ( is_int($value) ) {
-            $result = $this->handler->setEx($key, ( isset($options['ex']) ? $options['ex'] : $this->_config['EXPIRE'] ), $value);
+        if ($timeless) {
+            $result = $this->handler->set($key, $value);
         } else {
             $result = $this->handler->set($key, $value, $options);
         }

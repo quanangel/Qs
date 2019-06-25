@@ -20,7 +20,8 @@
             "Qs\\redis\\": "redis/",
             "Qs\\sso\\": "sso/",
             "Qs\\log\\": "log/",
-            "Qs\\db\\": "db/"
+            "Qs\\db\\": "db/",
+            "Qs\\wechat\\": "wechat/"
         }
     }
 }
